@@ -142,7 +142,7 @@ class _UserProfileScreenState extends State<UserProfileScreen> {
                         ),
                         child: Padding(
                           padding: EdgeInsets.symmetric(vertical: 16.0),
-                          child: Text('Save Profile', style: TextStyle(fontSize: 20,
+                          child: Text('Continue', style: TextStyle(fontSize: 20,
                           color: Colors.white)),
                         ),
                       ),
