@@ -3,6 +3,7 @@ import 'main_weather_screen.dart';
 import 'weather_provider.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:provider/provider.dart';
+import 'dart:convert';
 
 class WeatherScreen extends StatefulWidget {
   @override
@@ -25,6 +26,7 @@ class _WeatherScreenState extends State<WeatherScreen> {
     _homeLocationWeather = '';
     searchedCities = [];
     _loadHomeLocation();
+    _loadSearchedCities();
   }
 
   _loadHomeLocation() async {
@@ -34,18 +36,41 @@ class _WeatherScreenState extends State<WeatherScreen> {
       _homeLocationName = homeLocation;
     });
     if (!_isCityAlreadySearched(homeLocation)) {
-      _searchWeather(homeLocation);
+      _searchWeather(homeLocation, isInitialLoad: true);
     }
   }
 
-  _searchWeather(String query) {
-    if (query.isNotEmpty) {
-      Provider.of<WeatherProvider>(context, listen: false).fetchWeather(query);
+  _loadSearchedCities() async {
+    SharedPreferences prefs = await SharedPreferences.getInstance();
+    String? citiesString = prefs.getString('searchedCities');
+    if (citiesString != null) {
       setState(() {
-        if (_homeLocationName != query) {
-          searchedCities.add(query);
-        }
+        searchedCities = List<String>.from(jsonDecode(citiesString));
       });
+    }
+  }
+
+  _saveSearchedCities() async {
+    SharedPreferences prefs = await SharedPreferences.getInstance();
+    prefs.setString('searchedCities', jsonEncode(searchedCities));
+  }
+
+  _searchWeather(String query, {bool isInitialLoad = false}) async {
+    if (query.isNotEmpty) {
+      await Provider.of<WeatherProvider>(context, listen: false).fetchWeather(query);
+      var weatherData = Provider.of<WeatherProvider>(context, listen: false).weatherData;
+      if (weatherData != null) {
+        setState(() {
+          if (isInitialLoad) {
+            _homeLocationTemperature = weatherData['main']['temp'];
+            _homeLocationWeather = weatherData['weather'][0]['main'];
+          }
+          if (_homeLocationName != query && !isInitialLoad) {
+            searchedCities.add(query);
+            _saveSearchedCities(); // Save the updated list of searched cities
+          }
+        });
+      }
       _searchController.clear();
     }
   }
@@ -57,9 +82,10 @@ class _WeatherScreenState extends State<WeatherScreen> {
 
     if (weatherData != null) {
       setState(() {
-        if(_homeLocationWeather==''){
-        _homeLocationTemperature = weatherData['main']['temp'];
-        _homeLocationWeather = weatherData['weather'][0]['main'];}
+        if (_homeLocationWeather == '') {
+          _homeLocationTemperature = weatherData['main']['temp'];
+          _homeLocationWeather = weatherData['weather'][0]['main'];
+        }
       });
     }
 
@@ -102,7 +128,7 @@ class _WeatherScreenState extends State<WeatherScreen> {
                           crossAxisAlignment: CrossAxisAlignment.end,
                           children: [
                             Text(
-                              ' $_homeLocationTemperature°C',
+                              '$_homeLocationTemperature°C',
                               style: TextStyle(
                                 fontWeight: FontWeight.bold,
                                 fontSize: 25,
@@ -185,10 +211,10 @@ class _WeatherScreenState extends State<WeatherScreen> {
                             ),
                           );
                         },
-                        child: Text(city.toUpperCase(),style: TextStyle(color: Colors.white),),
+                        child: Text(city.toUpperCase(), style: TextStyle(color: Colors.white)),
                         style: ElevatedButton.styleFrom(
-                           overlayColor: Colors.blue,
-                          backgroundColor: Colors.lightBlue,// Text color
+                          overlayColor: Colors.blue,
+                          backgroundColor: Colors.lightBlue, // Text color
                           shape: RoundedRectangleBorder(
                             borderRadius: BorderRadius.circular(5.0),
                           ),
