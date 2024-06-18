@@ -1,3 +1,4 @@
+import 'package:climate_app/city_search_screen.dart';
 import 'package:flutter/material.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:climate_app/main_weather_screen.dart';
@@ -36,7 +37,7 @@ class _UserProfileScreenState extends State<UserProfileScreen> {
 
     Navigator.pushReplacement(
       context,
-      MaterialPageRoute(builder: (context) => MainWeatherScreen()),
+      MaterialPageRoute(builder: (context) => WeatherScreen()),
     );
   }
 
