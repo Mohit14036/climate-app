@@ -92,6 +92,9 @@ flutter:
      - family: Ubuntu
        fonts:
          - asset: fonts/Ubuntu-Bold.ttf
+     - family: NotoSans
+       fonts:
+          - asset:  fonts/NotoSans_Condensed-Black.ttf
   #       - asset: fonts/Schyler-Italic.ttf
   #         style: italic
   #   - family: Trajan Pro

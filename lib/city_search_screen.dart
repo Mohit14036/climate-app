@@ -184,7 +184,7 @@ class _WeatherScreenState extends State<WeatherScreen> {
                             ),
                           );
                         },
-                        child: Text(city,),
+                        child: Text(city,style: TextStyle(color: Colors.white),),
                         style: ElevatedButton.styleFrom(
                            overlayColor: Colors.blue,
                           backgroundColor: Colors.lightBlue,// Text color
