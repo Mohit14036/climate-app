@@ -86,7 +86,7 @@ class _MainWeatherScreenState extends State<MainWeatherScreen> {
                                 Text(
                                   _homeLocation.toUpperCase(),
                                   textAlign: TextAlign.center,
-                                  style: TextStyle(fontWeight: FontWeight.bold, fontSize: 30),
+                                  style: TextStyle(fontWeight: FontWeight.bold, fontSize: 40),
                                 ),
                                 SizedBox(height: 10),
                                 weatherData != null
