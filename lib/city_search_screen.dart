@@ -42,8 +42,9 @@ class _WeatherScreenState extends State<WeatherScreen> {
     if (query.isNotEmpty) {
       Provider.of<WeatherProvider>(context, listen: false).fetchWeather(query);
       setState(() {
-        if(_homeLocationName!=query){
-          searchedCities.add(query);}
+        if (_homeLocationName != query) {
+          searchedCities.add(query);
+        }
       });
       _searchController.clear();
     }
@@ -61,78 +62,143 @@ class _WeatherScreenState extends State<WeatherScreen> {
       });
     }
 
-    return Scaffold(
-      appBar: AppBar(
-        title: Text('Weather Information'),
-      ),
-      body: Container(
-        padding: EdgeInsets.all(16.0),
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            // Display home location weather
-            if (_homeLocationTemperature != null &&
-                _homeLocationWeather != null) ...[
-              Text(
-                '$_homeLocationName',
-                style: TextStyle(fontWeight: FontWeight.bold),
-              ),
-              Text('Temperature: $_homeLocationTemperature°C'),
-              Text('Weather: $_homeLocationWeather'),
-              SizedBox(height: 20),
-            ],
-            // Search bar
-            Row(
+    return GestureDetector(
+      onTap: () {
+        FocusScope.of(context).unfocus(); // Dismiss keyboard
+      },
+      child: Scaffold(
+        appBar: AppBar(
+          title: Text(
+            'CITIES',
+            style: TextStyle(fontWeight: FontWeight.bold),
+            textAlign: TextAlign.center,
+          ),
+          centerTitle: true,
+        ),
+        body: SingleChildScrollView(
+          child: Container(
+            padding: EdgeInsets.all(16.0),
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
               children: [
-                Expanded(
-                  child: TextField(
-                    controller: _searchController,
-                    decoration: InputDecoration(
-                      labelText: 'Enter a city name',
+                // Display home location weather
+                if (_homeLocationTemperature != null &&
+                    _homeLocationWeather != null)
+                  ...[
+                    Row(
+                      children: [
+                        Expanded(
+                          child: Text(
+                            '$_homeLocationName',
+                            textAlign: TextAlign.left,
+                            style: TextStyle(
+                              fontWeight: FontWeight.bold,
+                              fontSize: 25,
+                            ),
+                          ),
+                        ),
+                        Column(
+                          crossAxisAlignment: CrossAxisAlignment.end,
+                          children: [
+                            Text(
+                              ' $_homeLocationTemperature°C',
+                              style: TextStyle(
+                                fontWeight: FontWeight.bold,
+                                fontSize: 25,
+                              ),
+                            ),
+                            Text(
+                              '$_homeLocationWeather',
+                              style: TextStyle(
+                                fontWeight: FontWeight.bold,
+                                fontSize: 25,
+                              ),
+                            ),
+                            SizedBox(height: 20),
+                          ],
+                        ),
+                      ],
                     ),
+                  ],
+                // Search bar
+                Container(
+                  decoration: BoxDecoration(
+                    border: Border.all(color: Colors.black),
+                    borderRadius: BorderRadius.circular(8.0),
+                  ),
+                  child: Row(
+                    children: [
+                      Expanded(
+                        child: TextField(
+                          controller: _searchController,
+                          decoration: InputDecoration(
+                            contentPadding: EdgeInsets.symmetric(horizontal: 10.0),
+                            labelText: 'Enter a city name',
+                            border: InputBorder.none,
+                          ),
+                        ),
+                      ),
+                      IconButton(
+                        icon: Icon(Icons.search),
+                        onPressed: () {
+                          String query = _searchController.text.trim();
+                          if (query.isNotEmpty && !_isCityAlreadySearched(query)) {
+                            _searchWeather(query);
+                          }
+                        },
+                      ),
+                    ],
                   ),
                 ),
-              ],
-            ),
-            SizedBox(height: 10),
-            // Search button
-            SizedBox(
-              width: double.infinity,
-              child: ElevatedButton(
-                onPressed: () {
-                  String query = _searchController.text.trim();
-                  if (query.isNotEmpty && !_isCityAlreadySearched(query)) {
-                    _searchWeather(query);
-                  }
-                },
-                child: Text('Search'),
-              ),
-            ),
-            SizedBox(height: 20),
-            // Display searched cities as buttons
-            Wrap(
-              spacing: 8.0,
-              runSpacing: 8.0,
-              children: searchedCities.map((city) {
-                return SizedBox(
+                SizedBox(height: 10),
+                // Search button
+                SizedBox(
                   width: double.infinity,
                   child: ElevatedButton(
                     onPressed: () {
-                      Navigator.push(
-                        context,
-                        MaterialPageRoute(
-                          builder: (context) => MainWeatherScreen(
-                            loadLocation: city,
+                      String query = _searchController.text.trim();
+                      if (query.isNotEmpty && !_isCityAlreadySearched(query)) {
+                        _searchWeather(query);
+                      }
+                    },
+                    child: Text('Search'),
+                  ),
+                ),
+                SizedBox(height: 20),
+                // Display searched cities as buttons
+                Wrap(
+                  spacing: 8.0,
+                  runSpacing: 8.0,
+                  children: searchedCities.map((city) {
+                    return SizedBox(
+                      width: double.infinity,
+                      child: ElevatedButton(
+                        onPressed: () {
+                          Navigator.push(
+                            context,
+                            MaterialPageRoute(
+                              builder: (context) => MainWeatherScreen(
+                                loadLocation: city,
+                                searchedCities: searchedCities,
+                              ),
+                            ),
+                          );
+                        },
+                        child: Text(city,),
+                        style: ElevatedButton.styleFrom(
+                           overlayColor: Colors.blue,
+                          backgroundColor: Colors.lightBlue,// Text color
+                          shape: RoundedRectangleBorder(
+                            borderRadius: BorderRadius.circular(5.0),
                           ),
                         ),
-                      );
-                    },
-                    child: Text(city),
-                  ),
-                );
-              }).toList(),
+                      ),
+                    );
+                  }).toList(),
+                ),
+              ],
             ),
-          ],
+          ),
         ),
       ),
     );
@@ -142,15 +208,4 @@ class _WeatherScreenState extends State<WeatherScreen> {
   bool _isCityAlreadySearched(String city) {
     return searchedCities.contains(city);
   }
-}
-
-void main() {
-  runApp(MaterialApp(
-    home: MultiProvider(
-      providers: [
-        ChangeNotifierProvider(create: (_) => WeatherProvider()),
-      ],
-      child: WeatherScreen(),
-    ),
-  ));
 }

@@ -9,8 +9,9 @@ import 'city_search_screen.dart';
 
 class MainWeatherScreen extends StatefulWidget {
   final String? loadLocation;
+  final List<String>? searchedCities;
 
-  MainWeatherScreen({this.loadLocation});
+  MainWeatherScreen({this.loadLocation, this.searchedCities});
 
   @override
   _MainWeatherScreenState createState() => _MainWeatherScreenState();
@@ -57,9 +58,7 @@ class _MainWeatherScreenState extends State<MainWeatherScreen> {
 
     return Scaffold(
       backgroundColor: Colors.blue,
-      body:
-      Column(
-
+      body: Column(
         children: [
           Expanded(
             child: SingleChildScrollView(
@@ -87,9 +86,7 @@ class _MainWeatherScreenState extends State<MainWeatherScreen> {
                                 Text(
                                   _homeLocation.toUpperCase(),
                                   textAlign: TextAlign.center,
-
-                                  style: TextStyle(fontWeight: FontWeight.bold,
-                                      fontSize: 30),
+                                  style: TextStyle(fontWeight: FontWeight.bold, fontSize: 30),
                                 ),
                                 SizedBox(height: 10),
                                 weatherData != null
@@ -152,7 +149,7 @@ class _MainWeatherScreenState extends State<MainWeatherScreen> {
                       FloatingSearchBarAction.icon(
                         icon: Icons.menu,
                         onTap: () {
-                          // Handle menu button press
+                          _showCitiesMenu();
                         },
                       ),
                     ],
@@ -187,15 +184,16 @@ class _MainWeatherScreenState extends State<MainWeatherScreen> {
       case 'Thunderstrom':
         imagePath = 'assets/thunderstrom.png';
         break;
-        // Add more cases as needed for different weather types
       default:
         imagePath = 'assets/drizzle.png';
     }
     return SizedBox(
       width: 200.0,
       height: 200.0,
-      child: Image.asset(imagePath,
-        fit: BoxFit.cover,),
+      child: Image.asset(
+        imagePath,
+        fit: BoxFit.cover,
+      ),
     );
   }
 
@@ -209,8 +207,7 @@ class _MainWeatherScreenState extends State<MainWeatherScreen> {
         borderRadius: BorderRadius.circular(10),
       ),
       child: Column(
-        mainAxisSize:
-        MainAxisSize.min,
+        mainAxisSize: MainAxisSize.min,
         children: [
           Icon(iconData),
           SizedBox(height: 10),
@@ -224,6 +221,30 @@ class _MainWeatherScreenState extends State<MainWeatherScreen> {
           ),
         ],
       ),
+    );
+  }
+
+  void _showCitiesMenu() {
+    showModalBottomSheet(
+      context: context,
+      builder: (BuildContext context) {
+        return Container(
+          height: MediaQuery.of(context).size.height * 0.6,
+          child: ListView.builder(
+            itemCount: widget.searchedCities!.length,
+            itemBuilder: (BuildContext context, int index) {
+              final searchedCity = widget.searchedCities![index];
+              return ListTile(
+                title: Text(searchedCity),
+                onTap: () {
+                  Navigator.pop(context); // Close the bottom sheet
+                  _searchWeather(searchedCity); // Fetch weather data for the selected city
+                },
+              );
+            },
+          ),
+        );
+      },
     );
   }
 }
