@@ -56,11 +56,14 @@ class _UserProfileScreenState extends State<UserProfileScreen> {
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
+                  ClipRRect(
+                    borderRadius: BorderRadius.circular(10.0),
+                  child:
                   Image.asset(
                     'icons/icon.jpg', // Replace this with the path to your image asset
                     height: 200,
                     fit: BoxFit.cover,
-                  ),
+                  ),),
                   SizedBox(height: 20),
                   Center(
                     child: Text(
