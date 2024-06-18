@@ -6,7 +6,7 @@ import 'package:shared_preferences/shared_preferences.dart';
 import 'user_profile_screen.dart';
 import 'main_weather_screen.dart';
 import 'weather_provider.dart';
-import 'splash_screen.dart';
+import 'nav_at_start.dart';
 import 'city_search_screen.dart';
 void main() {
   runApp(MyApp());
