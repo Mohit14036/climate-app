@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:material_floating_search_bar_2/material_floating_search_bar_2.dart';
-import 'detail_weather_screen.dart';
+
 import 'weather_provider.dart';
 import 'package:provider/provider.dart';
 import 'city_search_screen.dart';
@@ -85,9 +85,11 @@ class _MainWeatherScreenState extends State<MainWeatherScreen> {
                               mainAxisAlignment: MainAxisAlignment.center,
                               children: [
                                 Text(
-                                  _homeLocation,
+                                  _homeLocation.toUpperCase(),
                                   textAlign: TextAlign.center,
-                                  style: TextStyle(fontWeight: FontWeight.bold, fontSize: 30),
+
+                                  style: TextStyle(fontWeight: FontWeight.bold,
+                                      fontSize: 30),
                                 ),
                                 SizedBox(height: 10),
                                 weatherData != null
@@ -168,17 +170,26 @@ class _MainWeatherScreenState extends State<MainWeatherScreen> {
     String imagePath = '';
     switch (weatherType) {
       case 'Clear':
-        imagePath = 'assets/sunny.png';
+        imagePath = 'assets/clear.png';
         break;
       case 'Clouds':
         imagePath = 'assets/clouds.png';
         break;
       case 'Rain':
-        imagePath = 'assets/rainy.png';
+        imagePath = 'assets/rain.png';
         break;
-    // Add more cases as needed for different weather types
+      case 'Mist' || 'Smoke' || 'Haze' || 'Dust' || 'Fog' || 'Sand'||'Ash'||'Squall'|| 'Tornado':
+        imagePath = 'assets/multiple.png';
+        break;
+      case 'Snow':
+        imagePath = 'assets/snow.png';
+        break;
+      case 'Thunderstrom':
+        imagePath = 'assets/thunderstrom.png';
+        break;
+        // Add more cases as needed for different weather types
       default:
-        imagePath = 'assets/clear.png';
+        imagePath = 'assets/drizzle.png';
     }
     return SizedBox(
       width: 200.0,
@@ -202,7 +213,7 @@ class _MainWeatherScreenState extends State<MainWeatherScreen> {
         MainAxisSize.min,
         children: [
           Icon(iconData),
-          SizedBox(height: 8),
+          SizedBox(height: 10),
           Text(
             label,
             style: TextStyle(fontWeight: FontWeight.bold),
