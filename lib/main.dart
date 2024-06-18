@@ -25,7 +25,7 @@ class MyApp extends StatelessWidget {
         theme: ThemeData.light(),
         darkTheme: ThemeData.dark(),
         themeMode: ThemeMode.system,
-        home: UserProfileScreen(),
+        home: NavAtStart(),
         routes: {
           '/user-profile': (context) => UserProfileScreen(),
           '/weather': (context) => MainWeatherScreen(),
