@@ -57,8 +57,9 @@ class _WeatherScreenState extends State<WeatherScreen> {
 
     if (weatherData != null) {
       setState(() {
+        if(_homeLocationWeather==''){
         _homeLocationTemperature = weatherData['main']['temp'];
-        _homeLocationWeather = weatherData['weather'][0]['main'];
+        _homeLocationWeather = weatherData['weather'][0]['main'];}
       });
     }
 
