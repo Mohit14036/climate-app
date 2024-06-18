@@ -235,7 +235,7 @@ class _MainWeatherScreenState extends State<MainWeatherScreen> {
             itemBuilder: (BuildContext context, int index) {
               final searchedCity = widget.searchedCities![index];
               return ListTile(
-                title: Text(searchedCity),
+                title: Text(searchedCity.toUpperCase(),style: TextStyle(fontWeight: FontWeight.bold),),
                 onTap: () {
                   Navigator.pop(context); // Close the bottom sheet
                   _searchWeather(searchedCity); // Fetch weather data for the selected city
