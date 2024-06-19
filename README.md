@@ -1,6 +1,6 @@
 # climate_app
 
-A new Flutter project.
+A new Flutter project.                                                                                
 
 ## SCREENSHOTS                    
 <img src="https://github.com/Mohit14036/climate-app/assets/144369341/4ae76512-3e99-442b-8f92-5422f5f934a6" width="500">    
