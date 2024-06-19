@@ -214,7 +214,7 @@ class _WeatherScreenState extends State<WeatherScreen> {
                         child: Text(city.toUpperCase(), style: TextStyle(color: Colors.white)),
                         style: ElevatedButton.styleFrom(
                           overlayColor: Colors.blue,
-                          backgroundColor: Colors.lightBlue, // Text color
+                          backgroundColor: Colors.blue, // Text color
                           shape: RoundedRectangleBorder(
                             borderRadius: BorderRadius.circular(5.0),
                           ),

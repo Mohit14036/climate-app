@@ -57,7 +57,7 @@ class _MainWeatherScreenState extends State<MainWeatherScreen> {
     var weatherData = Provider.of<WeatherProvider>(context).weatherData;
 
     return Scaffold(
-      backgroundColor: Colors.blue,
+
       body: Column(
         children: [
           Expanded(
@@ -202,9 +202,11 @@ class _MainWeatherScreenState extends State<MainWeatherScreen> {
       width: 100,
       padding: EdgeInsets.all(10),
       margin: EdgeInsets.symmetric(horizontal: 10),
+
       decoration: BoxDecoration(
         color: Colors.white,
         borderRadius: BorderRadius.circular(10),
+        border: Border.all(color: Colors.grey),
       ),
       child: Column(
         mainAxisSize: MainAxisSize.min,
